@@ -1240,11 +1240,15 @@ function App() {
       document.getElementById('bm-icon-color-matrix')?.setAttribute(
         'values', `0 0 0 0 ${r}  0 0 0 0 ${g}  0 0 0 0 ${b}  0 0 0 1 0`
       );
-      bmColorPopup.querySelectorAll('.bm-cs-icon-btn img').forEach(img => {
-        img.style.filter = 'url(#bm-icon-color-filter)';
-      });
-      if (bmCsPvCustomIcon) bmCsPvCustomIcon.style.filter = 'url(#bm-icon-color-filter)';
-      if (bmWritingIconImg) bmWritingIconImg.style.filter = 'url(#bm-icon-color-filter)';
+      // Force repaint on all filtered elements so the color change is visible immediately.
+      // Some browsers won't repaint elements using a url(#id) filter when only the filter
+      // definition changes — toggling the filter style flushes the stale cache.
+      const filterVal = 'url(#bm-icon-color-filter)';
+      const targets = [...bmColorPopup.querySelectorAll('.bm-cs-icon-btn img')];
+      if (bmCsPvCustomIcon) targets.push(bmCsPvCustomIcon);
+      if (bmWritingIconImg) targets.push(bmWritingIconImg);
+      targets.forEach(el => { el.style.filter = 'none'; });
+      requestAnimationFrame(() => targets.forEach(el => { el.style.filter = filterVal; }));
     }
 
     function applyTextPreviewBg(hex) {

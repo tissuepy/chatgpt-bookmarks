@@ -943,16 +943,16 @@ function App() {
 
     function closeBookmarkModal() {
       bookmarkModal.classList.add('closing');
-      forceFullBookmark = false;
-      bmPreviewText.classList.remove('is-code');
-      clearCustomIcon();
-      setBmModalIconMode(false, '#181818');
       pendingCodeBmBtn = null;
       // Start fading the overlay backdrop slightly after the modal starts its drop
       setTimeout(() => bookmarkOverlay.classList.remove('visible'), 60);
       // Reset state after animation fully completes
       setTimeout(() => {
         bookmarkModal.classList.remove('closing');
+        forceFullBookmark = false;
+        bmPreviewText.classList.remove('is-code');
+        clearCustomIcon();
+        setBmModalIconMode(false, '#181818');
         _resetToCreateView();
       }, 680);
     }

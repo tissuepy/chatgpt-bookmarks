@@ -2446,10 +2446,9 @@ That would give you more useful signal without turning it into a giant news dump
         // z-index: active on top
         circle.style.zIndex = isActive ? '3' : String(vi + 1);
         circle.style.borderColor = isActive ? '' : '#EFEFEF';
-        // Dim only the icon content, not the badge background
-        const iconWrap = circle.querySelector('div');
-        if (iconWrap) iconWrap.style.opacity = isActive ? '1' : '0.2';
-        circle.appendChild(bmTtBadgeIcon(bm));
+        const iconDiv = bmTtBadgeIcon(bm);
+        if (!isActive) iconDiv.style.opacity = '0.2';
+        circle.appendChild(iconDiv);
 
         // Hover: highlight this badge, dim others
         circle.addEventListener('mouseenter', () => {

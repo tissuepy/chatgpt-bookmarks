@@ -1249,10 +1249,13 @@ function App() {
 
     function applyTextPreviewBg(hex) {
       const previewBox = document.getElementById('bm-preview-box');
-      if (!previewBox) return;
+      const pvCard = document.getElementById('bm-full-content');
+      const pvActions = document.querySelector('#bm-preview-view .bm-content-actions');
       const isBlack = hex.toLowerCase() === '#181818';
       if (isBlack) {
-        previewBox.style.background = '';
+        if (previewBox) previewBox.style.background = '';
+        if (pvCard) pvCard.style.background = '';
+        if (pvActions) pvActions.style.background = '';
       } else {
         const r = parseInt(hex.slice(1, 3), 16);
         const g = parseInt(hex.slice(3, 5), 16);
@@ -1260,7 +1263,10 @@ function App() {
         const lr = Math.round(255 - (255 - r) * 0.08);
         const lg = Math.round(255 - (255 - g) * 0.08);
         const lb = Math.round(255 - (255 - b) * 0.08);
-        previewBox.style.background = `rgb(${lr}, ${lg}, ${lb})`;
+        const bg = `rgb(${lr}, ${lg}, ${lb})`;
+        if (previewBox) previewBox.style.background = bg;
+        if (pvCard) pvCard.style.background = bg;
+        if (pvActions) pvActions.style.background = bg;
       }
     }
 
@@ -3122,6 +3128,18 @@ That would give you more useful signal without turning it into a giant news dump
           rpDotsFloat._currentRow = null;
         }
       });
+
+      // Hide float button when the right panel list scrolls
+      const bmRpBody = document.getElementById('bm-rp-body');
+      if (bmRpBody) {
+        bmRpBody.addEventListener('scroll', () => {
+          rpDotsFloat.style.display = 'none';
+          if (rpDotsFloat._currentRow) {
+            rpDotsFloat._currentRow.classList.remove('bm-rp-item-active');
+            rpDotsFloat._currentRow = null;
+          }
+        }, { passive: true });
+      }
     }
 
     // ── Drag bookmark to chat ─────────────────────────────────────────────────
